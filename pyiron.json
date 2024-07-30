@@ -1,0 +1,403 @@
+{
+  "enable": true,
+  "nodes": {
+      "pyiron": {
+      "type": "pyiron",
+      "category": "math",
+      "title": "pyiron",
+      "enableAddNewOne": true,
+	  "externalImports": "from pyiron import Project",
+      "sourceCode": "{{indent}}print('This is a pyiron job')\n{{indent}}pr=Project(path='chaldene_pyiron_test')\n{{indent}}basis = pr.create_ase_bulk('Al', cubic=True)\n{{indent}}supercell_3x3x3 = basis.repeat([3, 3, 3])\n{{indent}}job = pr.create_job(job_type=pr.job_type.Lammps, job_name='lammps_Al_T{{{inputs.1}}}K', delete_existing_job=True)\n{{indent}}job.structure = supercell_3x3x3\n{{indent}}job.calc_md(temperature={{{inputs.1}}}, pressure=0, n_ionic_steps=10000)\n{{indent}}pot = job.list_potentials()[0]\n{{indent}}job.run()\n{{indent}}print(job['output/generic/temperature'])",
+	  
+	  "inputs":{
+		"execIn":{
+		  "title":"execIn",
+		  "tooltip":"execIn",
+		  "dataType":"exec",
+		  "showWidget":false,
+		  "showTitle":false
+		  },        
+        "temperature": {
+          "dataType": "float",
+          "defaultValue": "0",
+          "title": "float",
+          "showTitle": true
+        }
+		 
+      },
+      "outputs": {
+      }
+    },
+	  "pyiron_temp": {
+      "type": "pyiron_temp",
+      "category": "math",
+      "title": "pyiron_temp",
+      "enableAddNewOne": true,
+	  "externalImports": "from pyiron import Project",
+      "sourceCode": "{{indent}}print('This is a pyiron job')\n{{indent}}pr=Project(path='chaldene_pyiron_test')\n{{indent}}basis = pr.create_ase_bulk('Al', cubic=True)\n{{indent}}supercell_3x3x3 = basis.repeat([3, 3, 3])\n{{indent}}job = pr.create_job(job_type=pr.job_type.Lammps, job_name='lammps_Al_T{{{inputs.1}}}K', delete_existing_job=True)\n{{indent}}job.structure = supercell_3x3x3\n{{indent}}job.calc_md(temperature={{{inputs.1}}}, pressure={{{inputs.2}}}, n_ionic_steps={{{inputs.3}}})\n{{indent}}pot = job.list_potentials()[0]\n{{indent}}job.run()\n{{indent}}{{{outputs.0}}}=job['output/generic/temperature']\n{{indent}}{{{outputs.1}}}=job['output/generic/steps']\n{{indent}}{{{outputs.2}}}",
+	  
+	  "inputs":{
+		"execIn":{
+		  "title":"execIn",
+		  "tooltip":"execIn",
+		  "dataType":"exec",
+		  "showWidget":false,
+		  "showTitle":false
+		  },        
+        "temperature": {
+          "dataType": "float",
+          "defaultValue": "0",
+          "title": "temperature",
+          "showTitle": true
+          },
+		"pressure": {
+          "dataType": "float",
+          "defaultValue": "0",
+          "title": "pressure",
+          "showTitle": true
+          },
+		"ionic_steps": {
+          "dataType": "integer",
+          "defaultValue": "0",
+          "title": "Ionic Steps",
+          "showTitle": true
+        }
+		 
+      },
+      "outputs": {
+		  "temperatures": {
+              "dataType": "numpy.ndarray",
+              "title": "temperatures",
+              "showTitle": true
+          },
+		  "steps": {
+              "dataType": "numpy.ndarray",
+              "title": "steps",
+              "showTitle": true
+          },
+		  "execOut":{
+			  "title":"execOut",
+			  "tooltip":"execOut",
+			  "dataType":"exec",
+		      "showWidget":false,
+		      "showTitle":false
+		}       
+      }
+    },
+      "plt_temp": {
+      "type": "plt_temp",
+      "category": "math",
+      "title": "plt_temp",
+	  "externalImports": "import matplotlib.pylab as plt",
+      "sourceCode": "{{indent}}plt.plot({{{inputs.1}}}, {{{inputs.0}}})\n{{indent}}plt.xlabel('MD step')\n{{indent}}plt.ylabel('Temperature [K]')",	  
+      "inputs": {
+        "temperatures": {
+          "dataType": "numpy.ndarray",
+          "title": "temperatures",
+          "showTitle": true
+        },
+		"steps": {
+          "dataType": "numpy.ndarray",
+          "title": "steps",
+          "showTitle": true
+        },
+		"execIn":{
+		  "title":"execIn",
+		  "tooltip":"execIn",
+		  "dataType":"exec",
+		  "showWidget":false,
+		  "showTitle":false
+		}        
+      },
+      "outputs": {
+      }
+    },
+    "pyiron_struct": {
+      "type": "pyiron_struct",
+      "category": "math",
+      "title": "structure",
+	  "externalImports": "from pyiron import Project",
+      "sourceCode": "{{indent}}pr = Project(path='chaldene_pyiron_test')\n{{indent}}basis = pr.create_ase_bulk('Al', cubic=True)\n{{indent}}{{{outputs.0}}} = basis.repeat([3, 3, 3])\n{{indent}}{{{outputs.0}}}.plot3d()\n{{indent}}{{{outputs.1}}}",
+	  
+      "inputs": {
+		"execIn":{
+		  "title":"execIn",
+		  "tooltip":"execIn",
+		  "dataType":"exec",
+		  "showWidget":false,
+		  "showTitle":false
+        }
+      },
+      "outputs": {
+		"supercell_3x3x3": {
+          "dataType": "anyDataType",
+          "title": "supercell_3x3x3",
+          "showTitle": true
+        },
+		"execOut":{
+		  "title":"execOut",
+	      "tooltip":"execOut",
+		  "dataType":"exec",
+	      "showWidget":false,
+	      "showTitle":false
+		}      
+      }
+    },
+    "pyiron_job": {
+      "type": "pyiron_job",
+      "category": "math",
+      "title": "pyiron_job",
+	  "externalImports": "from pyiron import Project",
+      "sourceCode": "{{indent}}job = pr.create_job(job_type=pr.job_type.Lammps, job_name='lammps_Al_T{{{inputs.1}}}K', delete_existing_job=True)\n{{indent}}job.structure = {{{inputs.4}}}\n{{indent}}job.calc_md(temperature={{{inputs.1}}}, pressure={{{inputs.2}}}, n_ionic_steps={{{inputs.3}}})\n{{indent}}pot = job.list_potentials()[{{{inputs.5}}}]\n{{indent}}job.run()\n{{indent}}{{{outputs.2}}}=job['output/generic/temperature']\n{{indent}}{{{outputs.3}}}=job['output/generic/steps']\n{{indent}}{{{outputs.1}}}=job\n{{indent}}{{{outputs.0}}}",
+      "inputs": {
+		"execIn":{
+		  "title":"execIn",
+		  "tooltip":"execIn",
+		  "dataType":"exec",
+		  "showWidget":false,
+		  "showTitle":false
+		},        
+        "temperature": {
+          "dataType": "float",
+          "defaultValue": "0",
+          "title": "temperature",
+          "showTitle": true
+        },
+		"pressure": {
+          "dataType": "float",
+          "defaultValue": "0",
+          "title": "pressure",
+          "showTitle": true
+        },
+		"ionic_steps": {
+          "dataType": "integer",
+          "defaultValue": "0",
+          "title": "Ionic Steps",
+          "showTitle": true
+        },
+	    "supercell_3x3x3": {
+          "dataType": "anyDataType",
+          "title": "supercell_3x3x3",
+          "showTitle": true
+        },
+		"potential": {
+          "dataType": "integer",
+          "defaultValue": "0",
+          "title": "Potential",
+          "showTitle": true
+        }
+		 
+      },
+      "outputs": {
+		  "execOut":{
+			  "title":"execOut",
+			  "tooltip":"execOut",
+			  "dataType":"exec",
+		      "showWidget":false,
+		      "showTitle":false
+		  },
+		  "job": {
+              "dataType": "anyDataType",
+              "title": "Job",
+              "showTitle": true
+          },
+		  "temperatures": {
+              "dataType": "numpy.ndarray",
+              "title": "temperatures",
+              "showTitle": true
+          },
+		  "steps": {
+              "dataType": "numpy.ndarray",
+              "title": "steps",
+              "showTitle": true
+          }
+      }
+    },
+    "list_potentials": {
+      "type": "list_potentials",
+      "category": "function",
+      "title": "list_potentials",
+      "tooltip": "Returns a list of potentials for a given pyiron job.",
+      "dataType": "numpy.ndarray",
+      "sourceCode": "{{indent}}{{{inputs.1}}}.list_potentials()",
+      "inputs": {
+		"execIn":{
+		  "title":"execIn",
+		  "tooltip":"execIn",
+		  "dataType":"exec",
+		  "showWidget":false,
+		  "showTitle":false
+        },        
+		"job": {
+          "dataType": "anyDataType",
+          "title": "job",
+          "showTitle": true
+        }
+      },
+      "outputs": {
+      }
+    },
+    "max": {
+      "type": "max",
+      "category": "math",
+      "title": "max",
+      "sourceCode": "{{indent}}{{{outputs.0}}} = {{{inputs.0}}}.max()",
+      "inputs": {
+        "ndarray": {
+          "title": "ndarray",
+          "dataType": "numpy.ndarray"
+        }
+      },
+      "outputs": {
+        "max": {
+          "title": "max ",
+          "dataType": "integer"
+        }
+      }
+    },
+        "transpose": {
+      "type": "transpose",
+      "category": "math",
+      "title": "transpose",
+      "sourceCode": "{{indent}}{{{outputs.0}}} = {{{inputs.0}}}.max()",
+      "inputs": {
+        "ndarray": {
+          "title": "ndarray",
+          "dataType": "numpy.ndarray"
+        }
+      },
+      "outputs": {
+        "transpose": {
+          "title": "transpose",
+          "dataType": "numpy.ndarray"
+        }
+      }
+    },
+    "binarize": {
+      "type": "binarize",
+      "category": "function",
+      "title": "binarize",
+      "externalImports": "import numpy as np",
+      "sourceCode": "{{indent}}{{{outputs.0}}}= ({{{inputs.0}}} > {{{inputs.1}}}) * 255",
+      "inputs": {
+        "execIn": {
+          "title": "execIn",
+          "dataType": "exec",
+          "showWidget": false,
+          "showTitle": false
+        },
+        "image": {
+          "title": "image",
+          "dataType": "image",
+          "defaultValue": {
+            "dataType": "numpy.ndarray",
+            "metadata": [
+              {
+                "colorChannel": "grayscale",
+                "isMiniBatched": false,
+                "channelOrder": "none",
+                "intensityRange": "0-255"
+              }
+            ]
+          }
+        },
+        "threshold": {
+          "title": "threshold",
+          "dataType": "integer",
+            "defaultValue": 128
+        }
+      },
+      "outputs": {
+        "execOut": {
+          "title": "execOut",
+          "dataType": "exec",
+          "showWidget": false,
+          "showTitle": false
+        },
+        "binarized": {
+          "dataType": "image",
+          "defaultValue": {
+            "dataType": "numpy.ndarray",
+            "metadata": [
+              {
+                "colorChannel": "grayscale",
+                "isMiniBatched": false,
+                "channelOrder": "none",
+                "intensityRange": "0-1"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "digitize": {
+      "type": "digitize",
+      "category": "function",
+      "title": "digitize",
+      "externalImports": "import numpy as np",
+      "sourceCode": "{{indent}}{{{outputs.1}}} =  np.digitize({{{inputs.1}}})\n{{indent}}{{{outputs.1}}} = {'value': {{{outputs.1}}}[0], 'dataType': 'numpy.ndarray', 'metadata': {'colorChannel': 'grayscale', 'channelOrder': 'channelFirst', 'isMiniBatched': True, 'intensityRange': '0-1', 'device': 'cpu'}}\n{{{outputs.0}}}",
+      "inputs": {
+        "execIn": {
+          "title": "execIn",
+          "dataType": "exec",
+          "showWidget": false,
+          "showTitle": false
+        },
+        "image": {
+          "title": "image",
+          "dataType": "image",
+          "defaultValue": {
+            "dataType": "numpy.ndarray",
+            "metadata": [
+              {
+                "colorChannel": "grayscale",
+                "isMiniBatched": false,
+                "channelOrder": "none",
+                "intensityRange": "0-255"
+              }
+            ]
+          }
+        },
+        "nbins": {
+          "title": "nbins",
+          "dataType": "list"
+        },
+        "right": {
+          "title": "right",
+          "dataType": "boolean",
+          "defaultValue": false
+        }
+      },
+      "outputs": {
+        "execOut": {
+          "title": "execOut",
+          "dataType": "exec",
+          "showWidget": false,
+          "showTitle": false
+        },
+        "image": {
+          "title": "image",
+          "dataType": "image",
+           "defaultValue": {
+            "dataType": "numpy.ndarray",
+            "metadata": [
+              {
+                "colorChannel": "grayscale",
+                "isMiniBatched": false,
+                "channelOrder": "none",
+                "intensityRange": "0-1"
+              }
+            ]
+          },
+          "tooltip": "Output array of indices, of same shape as x."
+        }
+      }
+    }
+    },
+  "types": {
+    "ndarray": {
+      "default": "",
+      "shownInColor": "hsl(80, 50%, 50%)"
+    }
+  }
+}
