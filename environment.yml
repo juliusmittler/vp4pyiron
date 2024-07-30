@@ -1,0 +1,9 @@
+channels:
+- conda-forge
+dependencies:
+- python =3.11
+- lammps =2024.06.27=*_openmpi_*
+- pyiron_base =0.9.10
+- pyiron_atomistics =0.6.9
+- pyiron-data =0.0.30
+- vp4jl =0.1.4

@@ -1,0 +1,2 @@
+#!/bin/bash
+cp pyiron.json /srv/conda/envs/notebook/lib/python3.11/site-packages/vp4jl/nodeextension
